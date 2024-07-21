@@ -65,7 +65,7 @@ private:
 
 int main()
 {
-	Vector<bool> A(33, true);
+	Vector<bool> A(110, false);
 	
 	return 0;
 }

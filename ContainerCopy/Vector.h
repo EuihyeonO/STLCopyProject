@@ -225,13 +225,13 @@ public:
 			MyElements = new unsigned int[MyCapacity](0);
 			BeginPtr = MyElements;
 			
-			unsigned int Data = _Data ? 1 : 0;
-
-			for (size_t i = 0; i < _Size; i++)
+			if (_Data == true)
 			{
-				size_t Index = i / 32;
-
-				MyElements[Index] |= (Data << (i % 32));
+				RangedBitOn(0, 0, _Size / 32, _Size % 32);
+			}
+			else
+			{
+				RangedBitOff(0, 0, _Size / 32, _Size % 32);
 			}
 		}
 	}
@@ -244,6 +244,45 @@ public:
 
 			BeginPtr = nullptr;
 			MyElements = nullptr;
+		}
+	}
+
+private:
+	void BitOff(size_t _Index, size_t _Bit)
+	{
+		MyElements[_Index] &= ~(1 << _Bit);
+	}
+
+	void BitOn(size_t _Index, size_t _Bit)
+	{
+		MyElements[_Index] |= (1 << _Bit);
+	}
+
+	void RangedBitOn(size_t _StartIndex, size_t _StartBit, size_t _EndIndex, size_t _EndBit)
+	{
+		size_t Start = _StartIndex * 32 + _StartBit;
+		size_t End = _EndIndex * 32 + _EndBit;
+
+		for (size_t i = Start; i < End; i++)
+		{
+			size_t Index = i / 32;
+			size_t Bit = i % 32;
+
+			MyElements[Index] |= (1 << Bit);
+		}
+	}
+
+	void RangedBitOff(size_t _StartIndex, size_t _StartBit, size_t _EndIndex, size_t _EndBit)
+	{
+		size_t Start = _StartIndex * 32 + _StartBit;
+		size_t End = _EndIndex * 32 + _EndBit;
+
+		for (size_t i = Start; i < End; i++)
+		{
+			size_t Index = i / 32;
+			size_t Bit = i % 32;
+
+			MyElements[Index] &= ~(1 << Bit);
 		}
 	}
 
