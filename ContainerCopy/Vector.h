@@ -123,6 +123,7 @@ public:
 		new (&MyElements[MySize]) DataType(std::forward<Valty>(_Value)...);
 
 		++MySize;
+		++EndPtr;
 	}
 
 	void Push_Back(const DataType& _Data)
@@ -133,7 +134,9 @@ public:
 		}
 	
 		MyElements[MySize] = _Data;
+
 		++MySize;
+		++EndPtr;
 	}
 	
 	void Push_Back(DataType&& _Data)
@@ -144,7 +147,9 @@ public:
 		}
 	
 		MyElements[MySize] = std::forward<DataType>(_Data);
+
 		++MySize;
+		++EndPtr;
 	}
 
 private:
@@ -176,9 +181,76 @@ private:
 private:
 	DataType* BeginPtr = nullptr;
 	DataType* EndPtr = nullptr;
-
 	DataType* MyElements = nullptr;
 	
+	size_t MySize = 0;
+	size_t MyCapacity = 0;
+};
+
+template <>
+class Vector<bool>
+{
+public:
+	//Default
+	Vector() : MySize(0), MyCapacity(32)
+	{
+		if (MyElements == nullptr)
+		{
+			MyElements = new unsigned int[MyCapacity]();
+			BeginPtr = MyElements;
+		}
+	}
+
+	//Only Size
+	Vector(const size_t _Size)
+	{
+		if (BeginPtr == nullptr)
+		{
+			MySize = _Size;
+			MyCapacity = _Size + (32 - (_Size % 32));
+
+			MyElements = new unsigned int[MyCapacity](0);
+			BeginPtr = MyElements;
+		}
+	}
+	
+	//Size, Data
+	Vector(const size_t _Size, const bool _Data)
+	{
+		if (BeginPtr == nullptr)
+		{
+			MySize = _Size;
+			MyCapacity = _Size + (32 - (_Size % 32));
+
+			MyElements = new unsigned int[MyCapacity](0);
+			BeginPtr = MyElements;
+			
+			unsigned int Data = _Data ? 1 : 0;
+
+			for (size_t i = 0; i < _Size; i++)
+			{
+				size_t Index = i / 32;
+
+				MyElements[Index] |= (Data << (i % 32));
+			}
+		}
+	}
+
+	~Vector()
+	{
+		if (MyElements != nullptr)
+		{
+			delete[] MyElements;
+
+			BeginPtr = nullptr;
+			MyElements = nullptr;
+		}
+	}
+
+private:
+	unsigned int* BeginPtr = nullptr;
+	unsigned int* MyElements = nullptr;
+
 	size_t MySize = 0;
 	size_t MyCapacity = 0;
 };

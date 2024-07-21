@@ -1,6 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include <vector>
+#include <bitset>
 #include "Vector.h"
 
 class A
@@ -64,5 +65,7 @@ private:
 
 int main()
 {
+	Vector<bool> A(33, true);
+	
 	return 0;
 }
