@@ -7,6 +7,9 @@
     <ClInclude Include="Vector.h">
       <Filter>Container</Filter>
     </ClInclude>
+    <ClInclude Include="DataStructureBase.h">
+      <Filter>Container</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

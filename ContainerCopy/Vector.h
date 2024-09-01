@@ -1,8 +1,9 @@
 #pragma once
 #include <memory>
+#include "DataStructureBase.h"
 
 template<typename DataType>
-class Vector 
+class Vector : public DataStructureBase<DataType>
 {
 public:
 	//Default
