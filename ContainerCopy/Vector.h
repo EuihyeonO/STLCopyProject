@@ -100,6 +100,7 @@ public:
 		MySize = _Size;
 	}
 
+
 	void Resize(const size_t _Size, DataType&& _Data)
 	{
 		ReAllocate(_Size);
@@ -177,7 +178,7 @@ private:
 		MyElements = NewPtr;
 
 		MyCapacity = _Capacity;
-	}
+	}	
 
 private:
 	DataType* BeginPtr = nullptr;
@@ -285,6 +286,7 @@ private:
 
 			MyElements[Index] &= ~(1 << Bit);
 		}
+
 	}
 
 private:
@@ -294,3 +296,4 @@ private:
 	size_t MySize = 0;
 	size_t MyCapacity = 0;
 };
+
