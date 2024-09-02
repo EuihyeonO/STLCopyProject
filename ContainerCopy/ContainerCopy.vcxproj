@@ -131,8 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DataStructureBase.h" />
-    <ClInclude Include="Iterator.h" />
+    <ClInclude Include="IteratorBase.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 #include <chrono>
 #include <vector>
 #include <bitset>
+
 #include "Vector.h"
 
 class A
@@ -62,10 +63,13 @@ public:
 private:
 	int* Arr = nullptr;
 };
-
+#include <algorithm>
 int main()
 {
-	Vector<bool> A(110, false);
-	
+	Vector<int> A;
+	A.Push_Back(1);
+	A.Push_Back(2);
+
+
 	return 0;
 }

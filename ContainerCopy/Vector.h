@@ -1,10 +1,13 @@
 #pragma once
 #include <memory>
-#include "DataStructureBase.h"
+#include "IteratorBase.h"
 
 template<typename DataType>
-class Vector : public DataStructureBase<DataType>
+class Vector
 {
+public:
+	class Iterator;
+
 public:
 	//Default
 	Vector() : MySize(0), MyCapacity(4)
@@ -74,6 +77,12 @@ public:
 			EndPtr = nullptr;
 			MyElements = nullptr;
 		}
+	}
+
+public:
+	Iterator Begin()
+	{
+		return Iterator(BeginPtr);
 	}
 
 public:
@@ -187,6 +196,58 @@ private:
 	
 	size_t MySize = 0;
 	size_t MyCapacity = 0;
+};
+
+template<typename DataType>
+class Vector<DataType>::Iterator : public IteratorBase
+{
+public:
+	Iterator()
+	{
+		DataPtr = nullptr;
+	}
+
+	Iterator(const DataType* _DataPtr)
+	{
+		DataPtr = const_cast<DataType*>(_DataPtr);
+	}
+
+	Iterator(const Iterator& _Iter)
+	{
+		DataPtr = _Iter.DataPtr;
+	}
+
+	Iterator& operator=(const Iterator& _Iter)
+	{
+		DataPtr = _Iter->DataPtr;
+	}
+
+	Iterator& operator=(Iterator&& _Iter)
+	{
+		DataPtr = _Iter->DataPtr;
+		_Iter->DataPtr = nullptr;
+	}
+
+	Iterator & operator++() override
+	{
+		DataPtr++;
+		return *this;
+	}
+
+	Iterator operator++(int)
+	{
+		Iterator ReturnIter(*this);
+		++(*this);
+		return ReturnIter;
+	}
+
+	void Debug()
+	{
+		std::cout << *DataPtr;
+	}
+
+private:
+		DataType* DataPtr = nullptr;
 };
 
 template <>
