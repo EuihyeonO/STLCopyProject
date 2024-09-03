@@ -63,13 +63,17 @@ public:
 private:
 	int* Arr = nullptr;
 };
-#include <algorithm>
+
 int main()
 {
 	Vector<int> A;
-	A.Push_Back(1);
-	A.Push_Back(2);
 
+	A.Push_Back(1);
+	A.Push_Back(3);
+	A.Push_Back(5);
+
+	Vector<int>::Iterator Start = A.Begin();
+	Vector<int>::Iterator End = A.End();
 
 	return 0;
 }

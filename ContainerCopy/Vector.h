@@ -1,6 +1,9 @@
 #pragma once
 #include <memory>
-#include "IteratorBase.h"
+
+/*****************************************************************************/
+/********************************** Vector  **********************************/
+/*****************************************************************************/
 
 template<typename DataType>
 class Vector
@@ -8,6 +11,7 @@ class Vector
 public:
 	class Iterator;
 
+//Constructor
 public:
 	//Default
 	Vector() : MySize(0), MyCapacity(4)
@@ -79,12 +83,20 @@ public:
 		}
 	}
 
+//Iterator Function
 public:
 	Iterator Begin()
 	{
 		return Iterator(BeginPtr);
 	}
 
+	Iterator End()
+	{
+		return Iterator(EndPtr);
+	}
+
+
+//Vector Function (Memory)
 public:
 	void Reserve(const size_t _Capacity)
 	{
@@ -109,7 +121,6 @@ public:
 		MySize = _Size;
 	}
 
-
 	void Resize(const size_t _Size, DataType&& _Data)
 	{
 		ReAllocate(_Size);
@@ -122,6 +133,7 @@ public:
 		MySize = _Size;
 	}
 
+//Vector Function (Data)
 public:
 	template<typename... Valty>
 	void Emplace_Back(Valty&&... _Value)
@@ -163,6 +175,7 @@ public:
 		++EndPtr;
 	}
 
+//Only used in Class
 private:
 	void ReAllocate(const size_t _Capacity)
 	{
@@ -198,13 +211,16 @@ private:
 	size_t MyCapacity = 0;
 };
 
+/*************************************************************************************/
+/********************************** Vector Iterator **********************************/
+/*************************************************************************************/
+
 template<typename DataType>
-class Vector<DataType>::Iterator : public IteratorBase
+class Vector<DataType>::Iterator
 {
 public:
 	Iterator()
 	{
-		DataPtr = nullptr;
 	}
 
 	Iterator(const DataType* _DataPtr)
@@ -212,25 +228,38 @@ public:
 		DataPtr = const_cast<DataType*>(_DataPtr);
 	}
 
-	Iterator(const Iterator& _Iter)
+	Iterator(const Iterator& _Other)
 	{
-		DataPtr = _Iter.DataPtr;
+		DataPtr = _Other.DataPtr;
 	}
 
-	Iterator& operator=(const Iterator& _Iter)
+	Iterator& operator=(const Iterator& _Other)
 	{
-		DataPtr = _Iter->DataPtr;
+		DataPtr = _Other.DataPtr;
+		return *this;
 	}
 
-	Iterator& operator=(Iterator&& _Iter)
+	Iterator& operator=(Iterator&& _Other)
 	{
-		DataPtr = _Iter->DataPtr;
-		_Iter->DataPtr = nullptr;
+		DataPtr = _Other.ataPtr;
+		_Other.DataPtr = nullptr;
+
+		return *this;
 	}
 
-	Iterator & operator++() override
+	bool operator==(const Iterator& _Other)
 	{
-		DataPtr++;
+		return (DataPtr == _Other.DataPtr);
+	}
+
+	bool operator!=(const Iterator& _Other)
+	{
+		return !(*this == _Other);
+	}
+
+	Iterator& operator++()
+	{
+		(DataPtr)++;
 		return *this;
 	}
 
@@ -240,15 +269,24 @@ public:
 		++(*this);
 		return ReturnIter;
 	}
+	 
+	DataType operator*()
+	{
+		return *(DataPtr);
+	}
 
 	void Debug()
 	{
-		std::cout << *DataPtr;
+		std::cout << *(DataPtr);
 	}
 
 private:
-		DataType* DataPtr = nullptr;
+	DataType* DataPtr = nullptr;
 };
+
+/***********************************************************************************/
+/********************************** Vector<bool>  **********************************/
+/***********************************************************************************/
 
 template <>
 class Vector<bool>
