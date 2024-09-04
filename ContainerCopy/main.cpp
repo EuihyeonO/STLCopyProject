@@ -75,5 +75,7 @@ int main()
 	Vector<int>::Iterator Start = A.Begin();
 	Vector<int>::Iterator End = A.End();
 
+	A.At(6);
+
 	return 0;
 }

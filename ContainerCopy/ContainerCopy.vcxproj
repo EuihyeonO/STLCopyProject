@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CustomException.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>

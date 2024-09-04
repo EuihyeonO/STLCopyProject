@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include <exception>
+#include "CustomException.h"
 
 /*****************************************************************************/
 /********************************** Vector  **********************************/
@@ -82,6 +84,14 @@ public:
 			MyElements = nullptr;
 		}
 	}
+
+//Operator
+public:
+	DataType operator[](size_t _Index)
+	{
+		return *(BeginPtr + _Index);
+	}
+
 
 //Iterator Function
 public:
@@ -173,6 +183,23 @@ public:
 
 		++MySize;
 		++EndPtr;
+	}
+
+	DataType At(size_t _Index)
+	{
+		try 
+		{
+			if (_Index >= MySize)
+			{
+				throw CustomException::OutOfLange(typeid(*this).name());
+			}
+		}
+		catch (std::exception& _Error)
+		{
+			std::cerr << _Error.what() << std::endl;
+		}
+
+		return *(BeginPtr + _Index);
 	}
 
 //Only used in Class

@@ -4,6 +4,9 @@
     <ClInclude Include="Vector.h">
       <Filter>Container</Filter>
     </ClInclude>
+    <ClInclude Include="CustomException.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -11,6 +14,9 @@
   <ItemGroup>
     <Filter Include="Container">
       <UniqueIdentifier>{3c2498c8-e247-419b-a124-5a39d906f18b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{ffbb79c4-ecb7-4b7d-ab4e-22ec09884753}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
