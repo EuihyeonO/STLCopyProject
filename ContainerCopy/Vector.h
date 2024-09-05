@@ -8,10 +8,34 @@
 /*****************************************************************************/
 
 template<typename DataType>
-class Vector
+class VectorBase
 {
 public:
 	class Iterator;
+
+public:
+	virtual void Reserve(const size_t _Capacity) = 0;
+	virtual void Resize(const size_t _Size) = 0;
+	virtual void Resize(const size_t _Size, const DataType& _Data) = 0;
+	virtual void Resize(const size_t _Size, DataType&& _Data) = 0;
+	
+	virtual void Push_Back(const DataType& _Data) = 0;
+	virtual void Push_Back(DataType&& _Data) = 0;
+	virtual void Pop_back() = 0;
+	
+	virtual void Insert(const Iterator& _Where, const DataType& _Value) = 0;
+	virtual void Clear() = 0;
+	
+	virtual const DataType& At(size_t _Index) = 0;
+	virtual const DataType& Front() = 0;
+	virtual const DataType& Back() = 0;
+};
+
+template<typename DataType>
+class Vector : public VectorBase<DataType>
+{
+public:
+	using Iterator = typename VectorBase<DataType>::Iterator;
 
 //Constructor
 public:
@@ -78,7 +102,7 @@ public:
 		if (MyElements != nullptr)
 		{
 			delete[] MyElements;
-
+			 
 			BeginPtr = nullptr;
 			EndPtr = nullptr;
 			MyElements = nullptr;
@@ -87,9 +111,9 @@ public:
 
 //Operator
 public:
-	DataType operator[](size_t _Index)
+	const DataType& operator[](size_t _Index)
 	{
-		return *(BeginPtr + _Index);
+		return MyElements[_Index];
 	}
 
 
@@ -102,28 +126,28 @@ public:
 
 	Iterator End()
 	{
-		return Iterator(EndPtr);
+		return  Iterator(EndPtr);
 	}
 
 
 //Vector Function (Memory)
 public:
-	void Reserve(const size_t _Capacity)
+	void Reserve(const size_t _Capacity) override
 	{
 		ReAllocate(_Capacity);
 	}
 
-	void Resize(const size_t _Size)
+	void Resize(const size_t _Size) override
 	{
 		ReAllocate(_Size);
 		MySize = _Size;
 	}
 
-	void Resize(const size_t _Size, const DataType& _Data)
+	void Resize(const size_t _Size, const DataType& _Data) override
 	{
 		ReAllocate(_Size);
 
-		for (int i = MySize; i < _Size; i++)
+		for (size_t i = MySize; i < _Size; i++)
 		{
 			MyElements[i] = _Data;
 		}
@@ -131,7 +155,7 @@ public:
 		MySize = _Size;
 	}
 
-	void Resize(const size_t _Size, DataType&& _Data)
+	void Resize(const size_t _Size, DataType&& _Data) override
 	{
 		ReAllocate(_Size);
 
@@ -159,7 +183,7 @@ public:
 		++EndPtr;
 	}
 
-	void Push_Back(const DataType& _Data)
+	void Push_Back(const DataType& _Data) override
 	{
 		if (MySize == MyCapacity)
 		{
@@ -172,7 +196,7 @@ public:
 		++EndPtr;
 	}
 	
-	void Push_Back(DataType&& _Data)
+	void Push_Back(DataType&& _Data) override
 	{
 		if (MySize == MyCapacity)
 		{
@@ -185,7 +209,7 @@ public:
 		++EndPtr;
 	}
 
-	DataType At(size_t _Index)
+	const DataType& At(size_t _Index) override
 	{
 		try 
 		{
@@ -199,7 +223,47 @@ public:
 			std::cerr << _Error.what() << std::endl;
 		}
 
-		return *(BeginPtr + _Index);
+		return MyElements[_Index];
+	}
+
+	const DataType& Front() override
+	{
+		return MyElements[0];
+	}
+
+	const DataType& Back() override
+	{
+		return MyElements[MySize - 1];
+	}
+
+	void Clear() override
+	{
+		MySize = 0;
+		EndPtr = BeginPtr + 1;
+	}
+
+	void Pop_back() override
+	{
+		if (MySize > 0)
+		{
+			MySize--;
+			EndPtr--;
+		}
+	}
+
+	void Insert(const Iterator& _Where, const DataType& _Value) override
+	{
+		if (MySize + 1 >= MyCapacity)
+		{
+			Reserve(MyCapacity * 2);
+		}
+
+		Iterator EndIter = End();
+
+		while (_Where != EndIter)
+		{
+			*EndIter = *(EndIter - 1);
+		}
 	}
 
 //Only used in Class
@@ -210,7 +274,6 @@ private:
 		{
 			return;
 		}
-
 
 		DataType* NewPtr = new DataType[_Capacity]();
 
@@ -243,7 +306,7 @@ private:
 /*************************************************************************************/
 
 template<typename DataType>
-class Vector<DataType>::Iterator
+class VectorBase<DataType>::Iterator
 {
 public:
 	Iterator()
@@ -296,8 +359,33 @@ public:
 		++(*this);
 		return ReturnIter;
 	}
+
+	Iterator& operator--()
+	{
+		(DataPtr)--;
+		return *this;
+	}
+
+	Iterator operator--(int)
+	{
+		Iterator ReturnIter(*this);
+		--(*this);
+		return ReturnIter;
+	}
 	 
-	DataType operator*()
+	Iterator& operator+(int _Offset)
+	{
+		DataPtr += _Offset;
+		return *this;
+	}
+
+	Iterator& operator-(int _Offset)
+	{
+		DataPtr -= _Offset;
+		return *this;
+	}
+
+	DataType& operator*()
 	{
 		return *(DataPtr);
 	}
@@ -316,7 +404,7 @@ private:
 /***********************************************************************************/
 
 template <>
-class Vector<bool>
+class Vector<bool> // : public VectorBase<bool>
 {
 public:
 	//Default

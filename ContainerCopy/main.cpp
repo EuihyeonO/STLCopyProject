@@ -67,15 +67,14 @@ private:
 int main()
 {
 	Vector<int> A;
-
+	std::vector<int> a;
 	A.Push_Back(1);
 	A.Push_Back(3);
 	A.Push_Back(5);
-
-	Vector<int>::Iterator Start = A.Begin();
-	Vector<int>::Iterator End = A.End();
-
-	A.At(6);
+	A.Push_Back(7);
+	A.Push_Back(9);
+	
+	std::vector<bool> b;
 
 	return 0;
 }
