@@ -1,6 +1,10 @@
 #pragma once
 #include <memory>
 #include <exception>
+#include <climits>
+#include <cassert>
+
+#include "RandomAccessIterator.h"
 #include "CustomException.h"
 
 /*****************************************************************************/
@@ -11,9 +15,6 @@ template<typename DataType>
 class VectorBase
 {
 public:
-	class Iterator;
-
-public:
 	virtual void Reserve(const size_t _Capacity) = 0;
 	virtual void Resize(const size_t _Size) = 0;
 	virtual void Resize(const size_t _Size, const DataType& _Data) = 0;
@@ -23,7 +24,7 @@ public:
 	virtual void Push_Back(DataType&& _Data) = 0;
 	virtual void Pop_back() = 0;
 	
-	virtual void Insert(const Iterator& _Where, const DataType& _Value) = 0;
+	virtual void Insert(const RandomAccessIterator<DataType>& _Where, const DataType& _Value) = 0;
 	virtual void Clear() = 0;
 	
 	virtual const DataType& At(size_t _Index) = 0;
@@ -35,7 +36,7 @@ template<typename DataType>
 class Vector : public VectorBase<DataType>
 {
 public:
-	using Iterator = typename VectorBase<DataType>::Iterator;
+	using Iterator = typename RandomAccessIterator<DataType>;
 
 //Constructor
 public:
@@ -116,19 +117,17 @@ public:
 		return MyElements[_Index];
 	}
 
-
 //Iterator Function
 public:
 	Iterator Begin()
 	{
 		return Iterator(BeginPtr);
 	}
-
+	
 	Iterator End()
 	{
 		return  Iterator(EndPtr);
 	}
-
 
 //Vector Function (Memory)
 public:
@@ -221,6 +220,7 @@ public:
 		catch (std::exception& _Error)
 		{
 			std::cerr << _Error.what() << std::endl;
+			assert(false);
 		}
 
 		return MyElements[_Index];
@@ -257,9 +257,9 @@ public:
 		{
 			Reserve(MyCapacity * 2);
 		}
-
+	
 		Iterator EndIter = End();
-
+	
 		while (_Where != EndIter)
 		{
 			*EndIter = *(EndIter - 1);
@@ -301,111 +301,16 @@ private:
 	size_t MyCapacity = 0;
 };
 
-/*************************************************************************************/
-/********************************** Vector Iterator **********************************/
-/*************************************************************************************/
-
-template<typename DataType>
-class VectorBase<DataType>::Iterator
-{
-public:
-	Iterator()
-	{
-	}
-
-	Iterator(const DataType* _DataPtr)
-	{
-		DataPtr = const_cast<DataType*>(_DataPtr);
-	}
-
-	Iterator(const Iterator& _Other)
-	{
-		DataPtr = _Other.DataPtr;
-	}
-
-	Iterator& operator=(const Iterator& _Other)
-	{
-		DataPtr = _Other.DataPtr;
-		return *this;
-	}
-
-	Iterator& operator=(Iterator&& _Other)
-	{
-		DataPtr = _Other.ataPtr;
-		_Other.DataPtr = nullptr;
-
-		return *this;
-	}
-
-	bool operator==(const Iterator& _Other)
-	{
-		return (DataPtr == _Other.DataPtr);
-	}
-
-	bool operator!=(const Iterator& _Other)
-	{
-		return !(*this == _Other);
-	}
-
-	Iterator& operator++()
-	{
-		(DataPtr)++;
-		return *this;
-	}
-
-	Iterator operator++(int)
-	{
-		Iterator ReturnIter(*this);
-		++(*this);
-		return ReturnIter;
-	}
-
-	Iterator& operator--()
-	{
-		(DataPtr)--;
-		return *this;
-	}
-
-	Iterator operator--(int)
-	{
-		Iterator ReturnIter(*this);
-		--(*this);
-		return ReturnIter;
-	}
-	 
-	Iterator& operator+(int _Offset)
-	{
-		DataPtr += _Offset;
-		return *this;
-	}
-
-	Iterator& operator-(int _Offset)
-	{
-		DataPtr -= _Offset;
-		return *this;
-	}
-
-	DataType& operator*()
-	{
-		return *(DataPtr);
-	}
-
-	void Debug()
-	{
-		std::cout << *(DataPtr);
-	}
-
-private:
-	DataType* DataPtr = nullptr;
-};
-
 /***********************************************************************************/
 /********************************** Vector<bool>  **********************************/
 /***********************************************************************************/
 
 template <>
-class Vector<bool> // : public VectorBase<bool>
+class Vector<bool> : public VectorBase<bool>
 {
+public:
+	using Iterator = RandomAccessIterator<bool>;
+
 public:
 	//Default
 	Vector() : MySize(0), MyCapacity(32)
@@ -463,6 +368,167 @@ public:
 		}
 	}
 
+//Operator
+public:
+	const bool operator[](size_t _Index)
+	{
+		size_t ArrayIndex = _Index / 32;
+		size_t BitIndex = _Index % 32;
+
+		bool ReturnBit = MyElements[ArrayIndex] & (1 << BitIndex);
+
+		return ReturnBit;
+	}
+
+//Iterator Function
+public:
+	Iterator Begin()
+	{
+		return Iterator(BeginPtr, 0);
+	}
+	
+	Iterator End()
+	{
+		return  ++Iterator(BeginPtr + (MySize / 32), (MySize % 32));
+	}
+
+//Vector Function (Memory)
+public:
+	virtual void Reserve(const size_t _Capacity)
+	{
+		ReAllocate(_Capacity);
+	}
+	
+	virtual void Resize(const size_t _Size)
+	{
+		ReAllocate(_Size);
+		MySize = _Size;
+	}
+
+	virtual void Resize(const size_t _Size, const bool& _Data)
+	{
+		ReAllocate(_Size);
+
+		size_t CurSize = MySize;
+		unsigned int ArrayData = (_Data == true ? UINT_MAX : 0);
+
+		size_t CurArrayIndex = CurSize / 32;
+		size_t MaxArrayIndex = _Size / 32;
+
+		while (CurArrayIndex < MaxArrayIndex)
+		{
+			MyElements[CurArrayIndex] = ArrayData;
+			CurArrayIndex++;
+		}
+	}
+
+	virtual void Resize(const size_t _Size, bool&& _Data)
+	{
+		//bool은 R-Value를 따로 처리할 필요는 없을 것 같다. 순수 가상 함수 때문에, 강제 정의 (상위 클래스에 선언된 함수를 좀 수정해야 할듯?)
+		bool Data = _Data;
+		Resize(_Size, Data);
+	}
+
+public:
+	virtual void Push_Back(const bool& _Data)
+	{
+		if (MySize + 1 >= MyCapacity)
+		{
+			ReAllocate(MyCapacity * 2);
+		}
+
+		size_t EndArrayIndex = MySize / 32;
+		size_t EndBitIndex = MySize % 32;
+
+		if (_Data == true)
+		{
+			BitOn(EndArrayIndex, EndBitIndex);
+		}
+		else
+		{
+			BitOff(EndArrayIndex, EndBitIndex);
+		}
+
+		MySize++;
+	}
+
+	virtual void Push_Back(bool&& _Data)
+	{
+		bool Data = _Data;
+		Push_Back(Data);
+	}
+
+	virtual void Pop_back()
+	{
+		if (MySize > 0)
+		{
+			MySize--;
+		}
+	}
+	
+	virtual void Insert(const Iterator& _Where, const bool& _Value)
+	{
+		if (MySize + 1 >= MyCapacity)
+		{
+			ReAllocate(MyCapacity * 2);
+		}
+
+		MySize++;
+
+		Iterator StartIter = _Where;
+		Iterator EndIter = End();
+
+
+		while (StartIter != EndIter)
+		{
+			bool PrevValue = *(EndIter - 1);
+			*EndIter = PrevValue;
+			EndIter--;
+		}
+
+		Iterator InsertIter = _Where;
+		*InsertIter = _Value;
+
+		std::cout << *Begin() << *(Begin() + 1) << *(Begin() + 2) << std::endl;
+	}
+
+	virtual void Clear() 
+	{
+		MySize = 0;
+	}
+	
+	virtual const bool& At(size_t _Index) 
+	{
+		try
+		{
+			if (_Index >= MySize)
+			{
+				throw CustomException::OutOfLange(typeid(*this).name());
+			}
+		}
+		catch (std::exception& _Error)
+		{
+			std::cerr << _Error.what() << std::endl;
+			assert(false);
+		}
+
+		return MyElements[_Index];
+	}
+
+	virtual const bool& Front() 
+	{
+		return (*BeginPtr & (1 << 0)); 
+	}
+
+	virtual const bool& Back()
+	{
+		unsigned int* _EndElement = BeginPtr + (MySize / 32);
+		size_t BitIndex = MySize % 32;
+
+		return (*_EndElement & (1 << BitIndex));
+	}
+
+//Only used in class
 private:
 	void BitOff(size_t _Index, size_t _Bit)
 	{
@@ -500,7 +566,31 @@ private:
 
 			MyElements[Index] &= ~(1 << Bit);
 		}
+	}
 
+	void ReAllocate(const size_t _Capacity)
+	{
+		if (_Capacity <= MyCapacity)
+		{
+			return;
+		}
+
+		size_t Shared_32 = _Capacity / 32;
+		size_t RealCapacity = Shared_32 + 1;
+
+
+		unsigned int* NewPtr = new unsigned int[RealCapacity]();
+
+		for (size_t i = 0; i < RealCapacity; i++)
+		{
+			NewPtr[i] = std::move(MyElements[i]);
+		}
+
+		BeginPtr = NewPtr;
+		delete[] MyElements;
+
+		MyElements = NewPtr;
+		MyCapacity = _Capacity;
 	}
 
 private:

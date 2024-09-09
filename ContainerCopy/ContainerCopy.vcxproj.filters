@@ -7,6 +7,9 @@
     <ClInclude Include="CustomException.h">
       <Filter>Debug</Filter>
     </ClInclude>
+    <ClInclude Include="RandomAccessIterator.h">
+      <Filter>Iterator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -17,6 +20,9 @@
     </Filter>
     <Filter Include="Debug">
       <UniqueIdentifier>{ffbb79c4-ecb7-4b7d-ab4e-22ec09884753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Iterator">
+      <UniqueIdentifier>{32d6e02a-b142-44e1-bdb0-546af5f81879}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
