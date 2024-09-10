@@ -132,7 +132,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CustomException.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="RandomAccessIterator.h" />
+    <ClInclude Include="ExceptionFunction.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>

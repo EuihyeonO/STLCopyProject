@@ -5,7 +5,7 @@
 #include <cassert>
 
 #include "RandomAccessIterator.h"
-#include "CustomException.h"
+#include "ExceptionFunction.h"
 
 /*****************************************************************************/
 /********************************** Vector  **********************************/
@@ -424,7 +424,6 @@ public:
 
 	virtual void Resize(const size_t _Size, bool&& _Data)
 	{
-		//bool은 R-Value를 따로 처리할 필요는 없을 것 같다. 순수 가상 함수 때문에, 강제 정의 (상위 클래스에 선언된 함수를 좀 수정해야 할듯?)
 		bool Data = _Data;
 		Resize(_Size, Data);
 	}
@@ -496,22 +495,10 @@ public:
 	{
 		MySize = 0;
 	}
-	
+
 	virtual const bool& At(size_t _Index) 
 	{
-		try
-		{
-			if (_Index >= MySize)
-			{
-				throw CustomException::OutOfLange(typeid(*this).name());
-			}
-		}
-		catch (std::exception& _Error)
-		{
-			std::cerr << _Error.what() << std::endl;
-			assert(false);
-		}
-
+		ExceptionFunction::CheckException(_Index >= MySize, true, typeid(*this).name(), ExceptionType::OutOfRange);
 		return MyElements[_Index];
 	}
 

@@ -10,6 +10,12 @@
     <ClInclude Include="RandomAccessIterator.h">
       <Filter>Iterator</Filter>
     </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="ExceptionFunction.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
