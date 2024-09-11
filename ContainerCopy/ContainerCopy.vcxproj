@@ -131,7 +131,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BidirectionalIterator.h" />
     <ClInclude Include="CustomException.h" />
+    <ClInclude Include="Iterator.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="List.h" />
     <ClInclude Include="RandomAccessIterator.h" />
     <ClInclude Include="ExceptionFunction.h" />

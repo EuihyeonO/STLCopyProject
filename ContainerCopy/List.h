@@ -1,5 +1,6 @@
 #pragma once
 #include "ExceptionFunction.h"
+#include "Iterator.h"
 
 template <typename DataType>
 class List

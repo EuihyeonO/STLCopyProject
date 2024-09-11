@@ -4,7 +4,7 @@
 #include <climits>
 #include <cassert>
 
-#include "RandomAccessIterator.h"
+#include "Iterator.h"
 #include "ExceptionFunction.h"
 
 /*****************************************************************************/

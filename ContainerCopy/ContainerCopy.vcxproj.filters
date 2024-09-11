@@ -16,6 +16,12 @@
     <ClInclude Include="ExceptionFunction.h">
       <Filter>Debug</Filter>
     </ClInclude>
+    <ClInclude Include="Iterator.h">
+      <Filter>Iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="BidirectionalIterator.h">
+      <Filter>Iterator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
