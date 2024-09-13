@@ -76,6 +76,11 @@ public:
 		return *this;
 	}
 
+	int operator-(const RandomAccessIterator& _Other)
+	{
+		return DataPtr - _Other.DataPtr;
+	}
+
 	RandomAccessIterator& operator-(int _Offset)
 	{
 		DataPtr -= _Offset;

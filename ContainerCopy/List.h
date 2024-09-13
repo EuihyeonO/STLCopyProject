@@ -5,8 +5,10 @@
 template <typename DataType>
 class List
 {
-	class Node;
+	using Node = typename Node<DataType>;
+	using Iterator = typename BidirectionalIterator<DataType>;
 public:
+
 	List()
 	{
 		CreateDummyNode();
@@ -43,6 +45,17 @@ public:
 	}
 
 public:
+	Iterator Begin()
+	{
+		return Iterator(Head->NextNode);
+	}
+
+	Iterator End()
+	{
+		return Iterator(Tail);
+	}
+
+public:
 	void Push_Back(const DataType& _Data)
 	{
 		Node* NewNode = new Node();
@@ -62,7 +75,7 @@ public:
 	void Push_Back(DataType&& _Data)
 	{
 		Node* NewNode = new Node();
-		NewNode->DataPtr = _Data;
+		NewNode->Data = _Data;
 
 		Node* CurBackNode = Tail->PrevNode;
 		CurBackNode->NextNode = NewNode;
@@ -86,48 +99,11 @@ public:
 		ExceptionFunction::CheckException(Tail->PrevNode == nullptr, true, typeid(*this).name(), ExceptionType::OutOfRange);
 		return Tail->PrevNode->DataPtr;
 	}
-
-private:
-	class Node
+	
+	size_t Size()
 	{
-	public:
-		void operator=(const Node* _Node)
-		{
-			DataPtr = _Node->DataPtr;
-			PrevNode = _Node->PrevNode;
-			NextNode = _Node->NextNode;
-		}
-
-		const Node* operator++()
-		{
-			*this = NextNode;
-			return *this;
-		}
-
-		const Node operator++(int)
-		{
-			Node ReturnNode = NextNode;
-			++(*this);
-			return ReturnNode;
-		}
-
-		const Node* operator--()
-		{
-			*this = PrevNode;
-			return *this;
-		}
-
-		const Node* operator--(int)
-		{
-			Node ReturnNode = PrevNode;
-			--(*this);
-			return ReturnNode;
-		}
-
-		DataType* DataPtr = nullptr;
-		Node* PrevNode = nullptr;
-		Node* NextNode = nullptr;
-	};
+		return MySize;
+	}
 
 private:
 	void CreateDummyNode()
