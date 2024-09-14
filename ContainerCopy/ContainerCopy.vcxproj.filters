@@ -22,6 +22,12 @@
     <ClInclude Include="BidirectionalIterator.h">
       <Filter>Iterator</Filter>
     </ClInclude>
+    <ClInclude Include="Set.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Container\Node</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -35,6 +41,9 @@
     </Filter>
     <Filter Include="Iterator">
       <UniqueIdentifier>{32d6e02a-b142-44e1-bdb0-546af5f81879}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Container\Node">
+      <UniqueIdentifier>{1c18ac20-c245-4b46-8f25-e366b7d97fb3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -5,8 +5,12 @@
 template <typename DataType>
 class List
 {
-	using Node = typename Node<DataType>;
+private:
+	using MyNode = typename ListNode<DataType>;
+
+public:
 	using Iterator = typename BidirectionalIterator<DataType>;
+
 public:
 
 	List()
@@ -58,10 +62,10 @@ public:
 public:
 	void Push_Back(const DataType& _Data)
 	{
-		Node* NewNode = new Node();
+		MyNode* NewNode = new MyNode();
 		NewNode->DataPtr = _Data;
 
-		Node* CurBackNode = Tail->PrevNode;
+		MyNode* CurBackNode = Tail->PrevNode;
 		CurBackNode->NextNode = NewNode;
 
 		NewNode->PrevNode = CurBackNode;
@@ -74,10 +78,10 @@ public:
 
 	void Push_Back(DataType&& _Data)
 	{
-		Node* NewNode = new Node();
+		MyNode* NewNode = new MyNode();
 		NewNode->Data = _Data;
 
-		Node* CurBackNode = Tail->PrevNode;
+		MyNode* CurBackNode = Tail->PrevNode;
 		CurBackNode->NextNode = NewNode;
 
 		NewNode->PrevNode = CurBackNode;
@@ -108,8 +112,8 @@ public:
 private:
 	void CreateDummyNode()
 	{
-		Node* DummyHead = new Node();
-		Node* DummyTail = new Node();
+		MyNode* DummyHead = new MyNode();
+		MyNode* DummyTail = new MyNode();
 
 		Head = DummyHead;
 		Tail = DummyTail;
@@ -119,8 +123,8 @@ private:
 	}
 
 private:
-	Node* Head = nullptr;
-	Node* Tail = nullptr;
+	MyNode* Head = nullptr;
+	MyNode* Tail = nullptr;
 	
 	size_t MySize = 0;
 };

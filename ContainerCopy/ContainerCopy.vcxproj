@@ -138,8 +138,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="List.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="RandomAccessIterator.h" />
     <ClInclude Include="ExceptionFunction.h" />
+    <ClInclude Include="Set.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
