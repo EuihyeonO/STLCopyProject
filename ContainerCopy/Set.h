@@ -10,13 +10,6 @@ class Set
 private:
 	using MyNode = typename TreeNode<DataType>;
 
-	struct Debug
-	{
-		MyNode* Node;
-		std::string Pos;
-		int Depth;
-	};
-
 public:
 	using Iterator = typename BidirectionalIterator<DataType>;
 
@@ -42,7 +35,7 @@ public:
 		MySize++;
 
 		//더블레드발생
-		while(NewNode != RootNode && (NewNode->Color == MyNode::NodeColor::Red && NewNode->Parent->Color == MyNode::NodeColor::Red))
+		while(NewNode != nullptr && NewNode != RootNode && (NewNode->Color == MyNode::NodeColor::Red && NewNode->Parent->Color == MyNode::NodeColor::Red))
 		{
 			NewNode = Balancing(NewNode);
 		}
@@ -296,60 +289,9 @@ private:
 			ParentNode->RightChild->Color = MyNode::NodeColor::Red;
 		}
 
-		return _InsertedNode;
+		return nullptr;
 	}
 
-public:
-	void Print()
-	{
-		std::queue<Debug> Queue;
-
-		Debug NewDebug;
-		NewDebug.Node = RootNode;
-		NewDebug.Pos = "Root";
-		NewDebug.Depth = 1;
-
-		Queue.push(NewDebug);
-		
-		while (Queue.size() > 0)
-		{
-			MyNode* CurNode = Queue.front().Node;
-			std::string CurStr = Queue.front().Pos;
-			int Depth = Queue.front().Depth;
-
-			std::cout << CurNode->Data << " " << CurStr << " " << Depth ;
-			if (CurNode->Color == MyNode::NodeColor::Red)
-			{
-				std::cout << " Red" << "\n";
-			}
-			else
-			{
-				std::cout << " Black" << "\n";
-			}
-
-			Queue.pop();
-
-			if (CurNode->LeftChild != NilNode)
-			{
-				Queue.push({ CurNode->LeftChild, "Left", Depth + 1 });
-
-				if (CurNode->Color == CurNode->LeftChild->Color && CurNode->Color == MyNode::NodeColor::Red)
-				{
-					std::cout << "DoubleRed!" << "\n";
-				}
-			}
-
-			if (CurNode->RightChild != NilNode)
-			{
-				Queue.push({ CurNode->RightChild, "Right", Depth + 1 });
-
-				if (CurNode->Color == CurNode->RightChild->Color && CurNode->Color == MyNode::NodeColor::Red)
-				{
-					std::cout << "DoubleRed!" << "\n";
-				}
-			}
-		}
-	}
 public:
 
 	MyNode* NilNode = nullptr;

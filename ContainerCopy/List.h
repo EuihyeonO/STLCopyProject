@@ -48,6 +48,22 @@ public:
 		}
 	}
 
+	~List()
+	{
+		MyNode* CurNode = Head;
+		MyNode* NextNode = Head->NextNode;
+
+		while (NextNode != Tail)
+		{
+			NextNode = CurNode->NextNode;
+			delete CurNode;
+
+			CurNode = NextNode;
+		}
+
+		delete Tail;
+	}
+
 public:
 	Iterator Begin()
 	{

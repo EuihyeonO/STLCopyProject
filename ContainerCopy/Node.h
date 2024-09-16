@@ -74,34 +74,25 @@ public:
 
 	void operator=(const Node<DataType>* _Node)
 	{
-		//const TreeNode<DataType>* CastedNode = dynamic_cast<const TreeNode<DataType>*>(_Node);
-
-		//Data = CastedNode->Data;
-		//PrevNode = CastedNode->PrevNode;
-		//NextNode = CastedNode->NextNode;
 	}
 
 	TreeNode<DataType>* operator++() override
 	{
-		//*this = NextNode;
 		return this;
 	}
 
 	TreeNode<DataType>* operator++(int) override
 	{
-		//++(*this);
 		return nullptr;
 	}
 
 	TreeNode<DataType>* operator--() override
 	{
-		//*this = PrevNode;
 		return nullptr;
 	}
 
 	TreeNode<DataType>* operator--(int) override
 	{
-		//--(*this);
 		return nullptr;
 	}
 

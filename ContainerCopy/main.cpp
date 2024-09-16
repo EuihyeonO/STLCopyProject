@@ -2,26 +2,19 @@
 #include <list>
 #include <set>
 #include <type_traits>
+#include <crtdbg.h>
 
 #include "Vector.h"
 #include "List.h"
 #include "Iterator.h"
 #include "Set.h"
+
 int main()
 {
-	Set<int> A;
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	List<int> A;
 
-	srand(time(NULL));
 
-	A.Insert(10);
-	A.Insert(20);
-	A.Insert(30);
-	A.Insert(15);
-	A.Insert(25);
-	A.Insert(5);
-	A.Insert(1);
-
-	A.Print();
 
 	return 0;
 }
