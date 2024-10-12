@@ -227,17 +227,9 @@ private:
 			return (*DataPtr) & (1 << BitIndex);
 		}
 
-
 		void operator=(bool _Value)
 		{
-			if (_Value == true)
-			{
-				(*DataPtr) |= (1 << BitIndex);
-			}
-			else
-			{
-				(*DataPtr) &= ~(1 << BitIndex);
-			}
+			(_Value == true) ? (*DataPtr) |= (1 << BitIndex) : (*DataPtr) &= ~(1 << BitIndex);
 		}
 
 	private:

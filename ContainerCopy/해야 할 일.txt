@@ -1,0 +1,1 @@
+vector<bool>에도 bitreference 추가해야함

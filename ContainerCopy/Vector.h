@@ -437,7 +437,6 @@ public:
 		Iterator StartIter = _Where;
 		Iterator EndIter = End();
 
-
 		while (StartIter != EndIter)
 		{
 			bool PrevValue = *(EndIter - 1);

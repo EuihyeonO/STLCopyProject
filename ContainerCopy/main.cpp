@@ -10,14 +10,27 @@
 #include "Iterator.h"
 #include "Set.h"
 
+class A
+{
+public:
+	A(){}
+	A(int _A, int _B)
+	{
+		int C = 0;
+	}
+};
+
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	List<int> A;
-	A.Push_Back(1);
-	List<int>::Iterator Iter = A.Begin();
-	std::cout << *Iter;
+	Vector<bool> BoolVector;
+
+	BoolVector.Push_Back(false);
+
+	Vector<bool>::Iterator BoolIter = BoolVector.Begin();
+
+
 	return 0;
 }
 

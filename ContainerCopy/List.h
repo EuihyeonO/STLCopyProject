@@ -50,17 +50,20 @@ public:
 	~List()
 	{
 		MyNode* CurNode = Head;
-		MyNode* NextNode = Head->NextNode;
+		MyNode* NextNode = nullptr;
 
-		while (NextNode != Tail)
+		while (true)
 		{
 			NextNode = CurNode->NextNode;
 			delete CurNode;
 
 			CurNode = NextNode;
-		}
 
-		delete Tail;
+			if (CurNode == nullptr)
+			{
+				break;
+			}
+		}
 	}
 
 public:
