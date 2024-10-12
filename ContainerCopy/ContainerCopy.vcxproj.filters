@@ -2,31 +2,31 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Vector.h">
-      <Filter>Container</Filter>
+      <Filter>Container\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="CustomException.h">
-      <Filter>Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="RandomAccessIterator.h">
-      <Filter>Iterator</Filter>
+    <ClInclude Include="Vector_Iterator.h">
+      <Filter>Container\Vector</Filter>
     </ClInclude>
     <ClInclude Include="List.h">
-      <Filter>Container</Filter>
+      <Filter>Container\List</Filter>
     </ClInclude>
-    <ClInclude Include="ExceptionFunction.h">
-      <Filter>Debug</Filter>
+    <ClInclude Include="List_Iterator.h">
+      <Filter>Container\List</Filter>
     </ClInclude>
     <ClInclude Include="Iterator.h">
       <Filter>Iterator</Filter>
     </ClInclude>
-    <ClInclude Include="BidirectionalIterator.h">
-      <Filter>Iterator</Filter>
+    <ClInclude Include="ListNode.h">
+      <Filter>Container\List</Filter>
     </ClInclude>
     <ClInclude Include="Set.h">
-      <Filter>Container</Filter>
+      <Filter>Container\Tree\Set</Filter>
     </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Container\Node</Filter>
+    <ClInclude Include="TreeNode.h">
+      <Filter>Container\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="Set_Iterator.h">
+      <Filter>Container\Tree\Set</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -36,14 +36,20 @@
     <Filter Include="Container">
       <UniqueIdentifier>{3c2498c8-e247-419b-a124-5a39d906f18b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Debug">
-      <UniqueIdentifier>{ffbb79c4-ecb7-4b7d-ab4e-22ec09884753}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Iterator">
       <UniqueIdentifier>{32d6e02a-b142-44e1-bdb0-546af5f81879}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Container\Node">
-      <UniqueIdentifier>{1c18ac20-c245-4b46-8f25-e366b7d97fb3}</UniqueIdentifier>
+    <Filter Include="Container\Vector">
+      <UniqueIdentifier>{972719e2-abc3-4793-9ef5-7df44fd44445}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Container\List">
+      <UniqueIdentifier>{806a7a98-614a-4ad5-89aa-5703845f2412}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Container\Tree">
+      <UniqueIdentifier>{b91d999f-1a52-4c70-87c8-b1c1f122c79d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Container\Tree\Set">
+      <UniqueIdentifier>{d237895b-a9a7-4b51-86df-65ba6ed6bb4a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

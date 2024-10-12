@@ -131,18 +131,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BidirectionalIterator.h" />
-    <ClInclude Include="CustomException.h" />
-    <ClInclude Include="Iterator.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="List.h" />
-    <ClInclude Include="Node.h" />
-    <ClInclude Include="RandomAccessIterator.h" />
-    <ClInclude Include="ExceptionFunction.h" />
-    <ClInclude Include="Set.h" />
+    <ClInclude Include="Iterator.h" />
+    <ClInclude Include="ListNode.h" />
+    <ClInclude Include="List_Iterator.h" />
+    <ClInclude Include="Set_Iterator.h" />
+    <ClInclude Include="TreeNode.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="List.h" />
+    <ClInclude Include="Set.h" />
+    <ClInclude Include="Vector_Iterator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

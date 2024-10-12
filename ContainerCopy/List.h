@@ -1,6 +1,5 @@
 #pragma once
-#include "ExceptionFunction.h"
-#include "Iterator.h"
+#include "List_Iterator.h"
 
 template <typename DataType>
 class List
@@ -9,7 +8,7 @@ private:
 	using MyNode = typename ListNode<DataType>;
 
 public:
-	using Iterator = typename BidirectionalIterator<DataType>;
+	using Iterator = typename List_Iterator<DataType>;
 
 public:
 
@@ -79,7 +78,7 @@ public:
 	void Push_Back(const DataType& _Data)
 	{
 		MyNode* NewNode = new MyNode();
-		NewNode->DataPtr = _Data;
+		NewNode->Data = _Data;
 
 		MyNode* CurBackNode = Tail->PrevNode;
 		CurBackNode->NextNode = NewNode;
@@ -95,7 +94,7 @@ public:
 	void Push_Back(DataType&& _Data)
 	{
 		MyNode* NewNode = new MyNode();
-		NewNode->Data = _Data;
+		NewNode->Data = std::move(_Data);
 
 		MyNode* CurBackNode = Tail->PrevNode;
 		CurBackNode->NextNode = NewNode;
@@ -108,19 +107,17 @@ public:
 		MySize++;
 	}
 
-	const DataType& Front()
+	DataType& Front() const
 	{
-		ExceptionFunction::CheckException(Head->NextNode == nullptr, true, typeid(*this).name(), ExceptionType::OutOfRange);
 		return Head->NextNode->DataPtr;
 	}
 
-	const DataType& Back()
+	DataType& Back() const
 	{
-		ExceptionFunction::CheckException(Tail->PrevNode == nullptr, true, typeid(*this).name(), ExceptionType::OutOfRange);
 		return Tail->PrevNode->DataPtr;
 	}
 	
-	size_t Size()
+	size_t Size() const
 	{
 		return MySize;
 	}

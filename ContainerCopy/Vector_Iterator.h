@@ -1,32 +1,30 @@
 #pragma once
-
-#include<iostream>
+#include "iterator.h"
 
 template <typename DataType>
-class RandomAccessIterator
+class Vector_Iterator
 {
 public:
-	RandomAccessIterator()
+	using Iterator_Category = typename RandomAccess_Iterator_Tag;
+
+public:
+	Vector_Iterator(const DataType* _Node)
 	{
+		DataPtr = const_cast<DataType*>(_Node);
 	}
 
-	RandomAccessIterator(const DataType* _DataPtr)
-	{
-		DataPtr = const_cast<DataType*>(_DataPtr);
-	}
-
-	RandomAccessIterator(const RandomAccessIterator& _Other)
+	Vector_Iterator(const Vector_Iterator& _Other)
 	{
 		DataPtr = _Other.DataPtr;
 	}
 
-	RandomAccessIterator& operator=(const RandomAccessIterator& _Other)
+	Vector_Iterator& operator=(const Vector_Iterator& _Other)
 	{
 		DataPtr = _Other.DataPtr;
 		return *this;
 	}
 
-	RandomAccessIterator& operator=(RandomAccessIterator&& _Other) noexcept
+	Vector_Iterator& operator=(Vector_Iterator&& _Other) noexcept
 	{
 		DataPtr = _Other.DataPtr;
 		_Other.DataPtr = nullptr;
@@ -34,57 +32,40 @@ public:
 		return *this;
 	}
 
-	bool operator==(const RandomAccessIterator& _Other)
+	bool operator==(const Vector_Iterator& _Other) const
 	{
 		return (DataPtr == _Other.DataPtr);
 	}
 
-	bool operator!=(const RandomAccessIterator& _Other)
+	bool operator!=(const Vector_Iterator& _Other) const
 	{
 		return !(*this == _Other);
 	}
-	
-	RandomAccessIterator& operator++()
+
+	Vector_Iterator& operator++()
 	{
-		(DataPtr)++;
+		++DataPtr;
 		return *this;
 	}
 
-	RandomAccessIterator operator++(int)
+	Vector_Iterator operator++(int)
 	{
-		RandomAccessIterator ReturnIter(*this);
+		Vector_Iterator ReturnIter(*this);
 		++(*this);
 		return ReturnIter;
 	}
 
-	RandomAccessIterator& operator--()
+	Vector_Iterator& operator--()
 	{
-		(DataPtr)--;
+		--DataPtr;
 		return *this;
 	}
 
-	RandomAccessIterator operator--(int)
+	Vector_Iterator operator--(int)
 	{
-		RandomAccessIterator ReturnIter(*this);
+		Vector_Iterator ReturnIter(*this);
 		--(*this);
 		return ReturnIter;
-	}
-	 
-	RandomAccessIterator& operator+(int _Offset)
-	{
-		DataPtr += _Offset;
-		return *this;
-	}
-
-	int operator-(const RandomAccessIterator& _Other)
-	{
-		return DataPtr - _Other.DataPtr;
-	}
-
-	RandomAccessIterator& operator-(int _Offset)
-	{
-		DataPtr -= _Offset;
-		return *this;
 	}
 
 	DataType& operator*()
@@ -92,38 +73,46 @@ public:
 		return *(DataPtr);
 	}
 
-	void Debug()
+	Vector_Iterator operator+(int _Offset) const
 	{
-		std::cout << *(DataPtr);
+		return Vector_Iterator(this->DataPtr + _Offset);
 	}
 
-private:
+	Vector_Iterator operator-(int _Offset) const
+	{
+		return Vector_Iterator(this->DataPtr - _Offset);
+	}
+
+protected:
 	DataType* DataPtr = nullptr;
 };
 
 template<>
-class RandomAccessIterator<bool>
+class Vector_Iterator<bool>
 {
 	class BitReference;
 
 public:
-	RandomAccessIterator()
+	using Iterator_Category = typename RandomAccess_Iterator_Tag;
+
+public:
+	Vector_Iterator()
 	{
 	}
 
-	RandomAccessIterator(unsigned int* _DataPtr, size_t _BitIndex)
+	Vector_Iterator(unsigned int* _DataPtr, size_t _BitIndex)
 	{
 		DataPtr = _DataPtr;
 		BitIndex = _BitIndex;
 	}
 
-	RandomAccessIterator(const RandomAccessIterator& _Other)
+	Vector_Iterator(const Vector_Iterator& _Other)
 	{
 		DataPtr = _Other.DataPtr;
 		BitIndex = _Other.BitIndex;
 	}
 
-	RandomAccessIterator& operator=(const RandomAccessIterator& _Other)
+	Vector_Iterator& operator=(const Vector_Iterator& _Other)
 	{
 		DataPtr = _Other.DataPtr;
 		BitIndex = _Other.BitIndex;
@@ -131,7 +120,7 @@ public:
 		return *this;
 	}
 
-	RandomAccessIterator& operator=(RandomAccessIterator&& _Other) noexcept
+	Vector_Iterator& operator=(Vector_Iterator&& _Other) noexcept
 	{
 		DataPtr = _Other.DataPtr;
 		BitIndex = _Other.BitIndex;
@@ -140,17 +129,17 @@ public:
 		return *this;
 	}
 
-	bool operator==(const RandomAccessIterator& _Other)
+	bool operator==(const Vector_Iterator& _Other)
 	{
 		return (DataPtr == _Other.DataPtr && BitIndex == _Other.BitIndex);
 	}
 
-	bool operator!=(const RandomAccessIterator& _Other)
+	bool operator!=(const Vector_Iterator& _Other)
 	{
 		return !(*this == _Other);
 	}
 
-	RandomAccessIterator& operator++()
+	Vector_Iterator& operator++()
 	{
 		BitIndex++;
 
@@ -163,14 +152,14 @@ public:
 		return *this;
 	}
 
-	RandomAccessIterator operator++(int)
+	Vector_Iterator operator++(int)
 	{
-		RandomAccessIterator ReturnIter(*this);
+		Vector_Iterator ReturnIter(*this);
 		++(*this);
 		return ReturnIter;
 	}
 
-	RandomAccessIterator& operator--()
+	Vector_Iterator& operator--()
 	{
 		BitIndex--;
 
@@ -183,28 +172,28 @@ public:
 		return *this;
 	}
 
-	RandomAccessIterator operator--(int)
+	Vector_Iterator operator--(int)
 	{
-		RandomAccessIterator ReturnIter(*this);
+		Vector_Iterator ReturnIter(*this);
 		--(*this);
 		return ReturnIter;
 	}
 
-	RandomAccessIterator operator+(int _Offset)
+	Vector_Iterator operator+(int _Offset)
 	{
 		size_t ReturnBitIndex = BitIndex + _Offset;
 		unsigned int* ReturnDataPtr = DataPtr;
 
- 		while (ReturnBitIndex >= 32)
+		while (ReturnBitIndex >= 32)
 		{
 			ReturnBitIndex -= 32;
 			ReturnDataPtr++;
 		}
 
-		return RandomAccessIterator(ReturnDataPtr, ReturnBitIndex);
+		return Vector_Iterator(ReturnDataPtr, ReturnBitIndex);
 	}
 
-	RandomAccessIterator operator-(int _Offset)
+	Vector_Iterator operator-(int _Offset)
 	{
 		size_t ReturnBitIndex = BitIndex - _Offset;
 		unsigned int* ReturnDataPtr = DataPtr;
@@ -215,17 +204,12 @@ public:
 			ReturnDataPtr--;
 		}
 
-		return RandomAccessIterator(ReturnDataPtr, ReturnBitIndex);
+		return Vector_Iterator(ReturnDataPtr, ReturnBitIndex);
 	}
 
 	BitReference operator*()
 	{
 		return BitReference(DataPtr, BitIndex);
-	}
-
-	void Debug()
-	{
-		std::cout << *(DataPtr);
 	}
 
 private:

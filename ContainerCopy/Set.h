@@ -1,7 +1,6 @@
 #pragma once
-#include "Node.h"
+#include "Set_Iterator.h"
 
-#include <queue>
 #include <string>
 
 template<typename DataType>
@@ -11,7 +10,7 @@ private:
 	using MyNode = typename TreeNode<DataType>;
 
 public:
-	using Iterator = typename BidirectionalIterator<DataType>;
+	using Iterator = typename Set_Iterator<DataType>;
 
 public:
 	Set()
@@ -42,7 +41,6 @@ public:
 	}
 
 private:
-
 	MyNode* InsertNewElement(const DataType& _Data)
 	{
 		MyNode* NewNode = nullptr;
