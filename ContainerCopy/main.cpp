@@ -24,9 +24,13 @@ int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	List<int> A(5, 3);
-
+	Vector<bool> BoolVector;
+	BoolVector.Push_Back(true);
+	
+	BoolVector[0] = false;
+	BoolVector.At(0) = false;
 	return 0;
+
 }
 
  

@@ -84,7 +84,7 @@ public:
 
 	//Operator
 public:
-	const DataType& operator[](size_t _Index)
+	DataType& operator[](size_t _Index)
 	{
 		return MyElements[_Index];
 	}
@@ -180,7 +180,7 @@ public:
 		++EndPtr;
 	}
 
-	const DataType& At(size_t _Index) 
+	DataType& At(size_t _Index) 
 	{
 		if (_Index >= MySize)
 		{
@@ -190,12 +190,12 @@ public:
 		return MyElements[_Index];
 	}
 
-	const DataType& Front() 
+	DataType& Front() 
 	{
 		return MyElements[0];
 	}
 
-	const DataType& Back() 
+	DataType& Back() 
 	{
 		return MyElements[MySize - 1];
 	}
@@ -268,6 +268,8 @@ private:
 template <>
 class Vector<bool>
 {
+private:
+	class BitReference;
 public:
 	using Iterator = typename Vector_Iterator<bool>;
 
@@ -330,14 +332,9 @@ public:
 
 	//Operator
 public:
-	const bool operator[](size_t _Index)
+	BitReference operator[](size_t _Index)
 	{
-		size_t ArrayIndex = _Index / 32;
-		size_t BitIndex = _Index % 32;
-
-		bool ReturnBit = MyElements[ArrayIndex] & (1 << BitIndex);
-
-		return ReturnBit;
+		return BitReference(BeginPtr + _Index / 32, _Index % 32);
 	}
 
 	//Iterator Function
@@ -453,27 +450,30 @@ public:
 		MySize = 0;
 	}
 
-	virtual const bool& At(size_t _Index)
+	BitReference At(size_t _Index)
 	{
 		if (_Index >= MySize)
 		{
 			throw std::out_of_range("Index out of range");
 		}
 
-		return MyElements[_Index];
+		unsigned int* ElementPtr = BeginPtr + (_Index / 32);
+		size_t BitIndex = _Index % 32;
+
+		return BitReference(ElementPtr, BitIndex);
 	}
 
-	virtual const bool& Front()
+	BitReference Front()
 	{
-		return (*BeginPtr & (1 << 0));
+		return BitReference(BeginPtr, 0);
 	}
 
-	virtual const bool& Back()
+	BitReference Back()
 	{
-		unsigned int* _EndElement = BeginPtr + (MySize / 32);
+		unsigned int* EndElement = BeginPtr + (MySize / 32);
 		size_t BitIndex = MySize % 32;
 
-		return (*_EndElement & (1 << BitIndex));
+		return BitReference(EndElement, BitIndex - 1);
 	}
 
 	//Only used in class
@@ -540,6 +540,31 @@ private:
 		MyElements = NewPtr;
 		MyCapacity = _Capacity;
 	}
+
+private:
+	class BitReference
+	{
+	public:
+		BitReference(const unsigned int* _DataPtr, size_t _BitIndex)
+		{
+			DataPtr = const_cast<unsigned int*>(_DataPtr);
+			BitIndex = _BitIndex;
+		}
+
+		operator bool() const
+		{
+			return (*DataPtr) & (1 << BitIndex);
+		}
+
+		void operator=(bool _Value)
+		{
+			(_Value == true) ? (*DataPtr) |= (1 << BitIndex) : (*DataPtr) &= ~(1 << BitIndex);
+		}
+
+	private:
+		unsigned int* DataPtr = nullptr;
+		size_t BitIndex = 0;
+	};
 
 private:
 	unsigned int* BeginPtr = nullptr;
