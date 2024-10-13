@@ -97,7 +97,7 @@ public:
 	void Push_Back(DataType&& _Data)
 	{
 		MyNode* NewNode = new MyNode();
-		NewNode->Data = std::move(_Data);
+		NewNode->Data = std:move(_Data);
 
 		MyNode* CurBackNode = Tail->PrevNode;
 		CurBackNode->NextNode = NewNode;

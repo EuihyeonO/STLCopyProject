@@ -65,7 +65,7 @@ public:
 
 			for (size_t i = 0; i < _Size; i++)
 			{
-				MyElements[i] = std::forward<DataType>(_Data);
+				MyElements[i] = std:move(_Data);
 			}
 		}
 	}
@@ -132,7 +132,7 @@ public:
 
 		for (size_t i = MySize; i < _Size; i++)
 		{
-			MyElements[i] = std::forward<DataType>(_Data);
+			MyElements[i] = std:move(_Data);
 		}
 
 		MySize = _Size;
@@ -174,7 +174,7 @@ public:
 			ReAllocate(MyCapacity * 2);
 		}
 
-		MyElements[MySize] = std::forward<DataType>(_Data);
+		MyElements[MySize] = std:move(_Data);
 
 		++MySize;
 		++EndPtr;
