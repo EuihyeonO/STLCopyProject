@@ -43,7 +43,7 @@ public:
 
 		for (int i = 0; i < _Size; i++)
 		{
-			Push_Back(_Data);
+			Push_Back(std::move(_Data));
 		}
 	}
 
@@ -97,7 +97,7 @@ public:
 	void Push_Back(DataType&& _Data)
 	{
 		MyNode* NewNode = new MyNode();
-		NewNode->Data = std:move(_Data);
+		NewNode->Data = std::move(_Data);
 
 		MyNode* CurBackNode = Tail->PrevNode;
 		CurBackNode->NextNode = NewNode;
